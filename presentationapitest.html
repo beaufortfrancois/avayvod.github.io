@@ -4,9 +4,32 @@
   <link rel="default-presentation"
         href="http://cast.google.com#__castAppId__=CC1AD845&__castClientId__=1234&__castAutoJoin__=origin_scoped" />
   <script>
+    var appIdField = document.getElementById("add-id-field");
+    var startSessionButton = document.getElementById("start-session-button");
+    var defaultPresentationLink = document.getElementsByTagName("link")[0];
+
+    appIdField.onchange = function(e) {
+      defaultPresentationLink.href = "http://cast.google.com#__castAppId__=" + appIdField.value + "&__castClientId__=1234&__castAutoJoin__=origin_scoped";
+    };
+
+    startSessionButton.onclick = function(e) {
+      navigator.presentation.startSession(defaultPresentationLink.href, "ABCDEFGH")
+          .then(function(session) {
+            console.log(session);
+          })
+          .catch(function(e) {
+            console.log(e);
+          });
+    };
+
     navigator.presentation.onavailablechange = function(e) {
-        console.log(e.available);
+      console.log("Availability changed: " + e.available);
+      startSessionButton.disabled = e.available ? "" : "disabled";
     };
   </script>
 </head>
+<body>
+  <p><input title="Application id" defaultValue="CC1AD845" type="text" id="app-id-field"/></p>
+  <p><input title="Start session" type="button" id="start-session-button" disabled/></p>
+</body>
 </html>
