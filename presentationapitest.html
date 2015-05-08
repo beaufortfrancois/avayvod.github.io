@@ -17,6 +17,7 @@
         navigator.presentation.startSession(defaultPresentationLink.href, "ABCDEFGH")
             .then(function(session) {
               console.log(session);
+              session.close();
             })
             .catch(function(e) {
               console.log(e);
