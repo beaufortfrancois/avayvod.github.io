@@ -1,0 +1,101 @@
+4c4
+< Editor's Draft 14 May 2015
+---
+> Editor's Draft 11 May 2015
+62,73c62,73
+< 6.4 Interface NavigatorPresentation
+< 6.4.1 Starting a presentation session
+< 6.4.2 Joining a presentation session
+< 6.4.3 Establishing a presentation connection
+< 6.4.4 The onavailablechange EventHandler
+< 6.4.4.1 Adding an EventHandler to onavailablechange
+< 6.4.4.2 Removing an EventHandler
+< 6.4.4.3 Monitoring the list of available presentation displays
+< 6.5 Interface AvailableChangeEvent
+< 7 Security and privacy considerations
+< 8 References
+< 9 Acknowledgments
+---
+> 7 Interface NavigatorPresentation
+> 7.1 Starting a presentation session
+> 7.2 Joining a presentation session
+> 7.3 Establishing a presentation connection
+> 7.4 The onavailablechange EventHandler
+> 7.5 Adding an EventHandler to onavailablechange
+> 7.6 Removing an EventHandler
+> 7.7 Monitoring the list of available presentation displays
+> 8 Interface AvailableChangeEvent
+> Security and privacy considerations
+> References
+> Acknowledgments
+173d172
+< 
+189,190d187
+< 
+< 
+204,205d200
+< 
+< 
+239d233
+< 
+252d245
+< 
+293d285
+< 
+356c348
+< 6.4 Interface NavigatorPresentation
+---
+> 7 Interface NavigatorPresentation
+361,362d352
+< 
+< 
+371,372d360
+< 
+< 
+375c363
+< 6.4.1 Starting a presentation session
+---
+> 7.1 Starting a presentation session
+411c399
+< 6.4.2 Joining a presentation session
+---
+> 7.2 Joining a presentation session
+433c421
+< 6.4.3 Establishing a presentation connection
+---
+> 7.3 Establishing a presentation connection
+456c444
+< 6.4.4 The onavailablechange EventHandler
+---
+> 7.4 The onavailablechange EventHandler
+465c453
+< 6.4.4.1 Adding an EventHandler to onavailablechange
+---
+> 7.5 Adding an EventHandler to onavailablechange
+469c457
+< 6.4.4.2 Removing an EventHandler
+---
+> 7.6 Removing an EventHandler
+474c462
+< 6.4.4.3 Monitoring the list of available presentation displays
+---
+> 7.7 Monitoring the list of available presentation displays
+494c482
+< 6.5 Interface AvailableChangeEvent
+---
+> 8 Interface AvailableChangeEvent
+505,506d492
+< 
+< 
+509c495
+< 7 Security and privacy considerations
+---
+> Security and privacy considerations
+513c499
+< 8 References
+---
+> References
+533c519
+< 9 Acknowledgments
+---
+> Acknowledgments
