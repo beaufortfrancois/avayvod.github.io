@@ -634,8 +634,6 @@
     castBtn.style.display = evt.available ? "inline" : "none";
   };
 &lt;/script&gt;
-
-        
 </pre>
       </section>
       <section>
@@ -655,8 +653,6 @@
     // user cancels the selection dialog or an error is occurred
     .catch(endSession);
 &lt;/script&gt;
-
-        
 </pre>
       </section>
       <section>
@@ -674,8 +670,6 @@
     // no session found for presUrl and presId or an error is occurred
     .catch(endSession);
 &lt;/script&gt;
-
-        
 </pre>
       </section>
       <section>
@@ -713,7 +707,6 @@
     localStorage &amp;&amp; delete localStorage["presId"];
   };
 &lt;/script&gt;
-
 </pre>
         <pre class="example">&lt;!-- presentation.html --&gt;
 &lt;script&gt;
@@ -727,7 +720,6 @@
       session.send("hello");
   };
 &lt;/script&gt;
-
 </pre>
       </section>
     </section>
@@ -814,8 +806,6 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
   void <dfn id="send-arraybuffer" title="send-arraybuffer">send</dfn> (<a class="external" data-anolis-spec="typedarray" href="http://www.khronos.org/registry/typedarray/specs/latest/#5">ArrayBuffer</a> data);
   void <dfn id="send-arraybufferview" title="send-arraybufferview">send</dfn> (<a class="external" data-anolis-spec="typedarray" href="http://www.khronos.org/registry/typedarray/specs/latest/#6">ArrayBufferView</a> data);
 };
-
-        
 </pre>
         <p>
           The <dfn id="id"><code>id</code></dfn> attribute holds the alphanumeric
@@ -1060,8 +1050,6 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
         <pre class="idl">partial interface <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#navigator">Navigator</a> {
   readonly attribute <a href="#navigatorpresentation">NavigatorPresentation</a> <a href="#presentation">presentation</a>;
 };
-
-        
 </pre>
         <p>
           The <dfn id="presentation"><code>presentation</code></dfn> attribute is used to
@@ -1074,8 +1062,6 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
   Promise&lt;<a href="#presentationsession">PresentationSession</a>&gt; <a href="#joinsession">joinSession</a>(DOMString url, DOMString? presentationId);
   attribute <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <a href="#onavailablechange">onavailablechange</a>;
 };
-
-        
 </pre>
         <p class="open-issue">
           <a href="https://github.com/w3c/presentation-api/issues/52">ISSUE 52:
@@ -1539,8 +1525,6 @@ dictionary <dfn id="availablechangeeventinit">AvailableChangeEventInit</dfn> : E
   boolean available;
 };
 </span>
-
-        
 </pre>
         <p>
           An event named <code>availablechange</code> is fired during the
