@@ -451,25 +451,28 @@
         <pre class="example">&lt;!-- controller.html --&gt;
 &lt;button id="castBtn" style="display: none;"&gt;Cast&lt;/button&gt;
 &lt;script&gt;
-  // it is also possible to use relative presentation URL e.g. "presentation.html"
-  var presUrl = "http://example.com/presentation.html";
   // the cast button is visible if at least one presentation display is available
   var castBtn = document.getElementById("castBtn");
   // the availability listener object.
   var availability = null;
   // show or hide cast button depending on display availability
-  var handleAvailabilityChange = function() {
-    castBtn.style.display = availability.current ? "inline" : "none";
+  var handleAvailabilityChange = function(available) {
+    castBtn.style.display = available ? "inline" : "none";
   };
   // availablechange event is fired when the presentation display availability changes
-  navigator.presentation.getAvailability(presUrl).then(function(availabilityObj) {
+  navigator.presentation.getAvailability().then(function(availabilityObj) {
     // availability.current will be updated by the UA as long as the availability
     // object is alive. It is advised for the web developers to discard of the object
     // as soon as it's not needed.
     availability = availabilityObj;
-    handleAvailabilityChange();
-    availability.onchange = function() { handleAvailabilityChange(); };
-  };
+    handleAvailabilityChange(availability.current);
+    availability.onchange = function() { handleAvailabilityChange(availability.current); };
+  }.catch(function() {
+    // availability monitoring is not supported by the platform, discovery of second screens
+    // will happen only after startSession() call, pretend the devices are available for
+    // simplicity (one could implement the third state for the button).
+    handleAvailabilityChange(true);
+  });
 &lt;/script&gt;
 </pre>
       </section>
@@ -479,6 +482,8 @@
         </h3>
         <pre class="example">&lt;!-- controller.html --&gt;
 &lt;script&gt;
+  // it is also possible to use relative presentation URL e.g. "presentation.html"
+  var presUrl = "http://example.com/presentation.html";
   // create random presId
   var presId = Math.random().toFixed(6).substr(2);
   // Start new session. presId is optional.
@@ -533,8 +538,12 @@
 &lt;script&gt;
   var session;
   var setSession = function (theSession) {
-    // no need to monitor availability anymore
-    availability= null;
+    // no need to monitor availability anymore, help the UA save power
+    // by dereferencing the availability object.
+    if (availability) {
+      availability.onchange = null;
+      availability = null;
+    }
     // end existing session, if any
     endSession();
     // set the new session
@@ -926,6 +935,15 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
           list up to date by running the algorithm for <a href="#algorithm-monitor-available" title="algorithm-monitor-available">monitoring the list of available
           presentation displays</a>.
         </p>
+        <p>
+          The user agent might not support continuous availability monitoring
+          due to platform or power consumption restrictions, for example. In
+          this case the <span>Promise</span> returned by
+          <code>getAvailability()</code> is <a class="external" data-anolis-spec="promguide" href="http://www.w3.org/2001/tag/doc/promises-guide#shorthand-manipulating" title="resolve-reject">rejected</a> and the algorithm for
+          <a href="#algorithm-monitor-available" title="algorithm-monitor-available">monitoring the list of
+          available presentation displays</a> will only run as part of the
+          <a href="#startsession" title="startSession">session start</a> or join algorithms.
+        </p>
         <section>
           <h5 id="monitoring-the-list-of-available-presentation-displays"><span class="secno">6.4.1 </span>
             Monitoring the list of available presentation displays
@@ -1020,7 +1038,7 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
   readonly attribute <a href="#presentationsession">PresentationSession</a>? <span>session</span>;
   Promise&lt;<a href="#presentationsession">PresentationSession</a>&gt; <a href="#startsession">startSession</a>(DOMString url, DOMString? presentationId);
   Promise&lt;<a href="#presentationsession">PresentationSession</a>&gt; <a href="#joinsession">joinSession</a>(DOMString url, DOMString? presentationId);
-  Promise&lt;<a href="#availability">Availability</a>&gt; <a href="#getavailability">getAvailability</a>(DOMString? url);
+  Promise&lt;<a href="#availability">Availability</a>&gt; <a href="#getavailability">getAvailability</a>();
   attribute <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <a href="#ondefaultsessionstart">ondefaultsessionstart</a>;
 };
 </pre>
