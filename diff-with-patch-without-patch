@@ -1,16 +1,14 @@
-1,2c1,2
-< In order to satisfy the power saving non-functional requirements, the user agent must keep track of the number of Availability objects requested through the getAvailability method.
-< The UA may also keep track of whether the page holding the Availability object is in the foreground. Using this information, implementation specific discovery of presentation displays can be resumed or suspended, in order to save power.
+1,2c1
+< In order to satisfy the power saving non-functional requirement, the user agent must keep track of the number of Availability objects requested through the getAvailability method.
+< The UA may also keep track of whether the page holding the Availability object is in the foreground.
 ---
 > In order to satisfy the power saving non-functional requirement, the user agent must keep track of the number of EventHandlers registered to the onavailablechange event.
-> Using this information, implementation specific discovery of presentation displays can be resumed or suspended, in order to save power.
-5c5
+6c5
 < According to the number of alive Availability objects, the user agent must also keep the list up to date by running the algorithm for monitoring the list of available presentation displays.
 ---
 > According to the number of event handlers for onavailablechange, the user agent must also keep the list up to date by running the algorithm for monitoring the list of available presentation displays.
-7,10c7
-< The user agent might not support continuous availability monitoring due to platform or power consumption restrictions, for example.
-< In this case the Promise returned by getAvailability() is rejected and the algorithm for monitoring the list of available presentation displays will only run as part of the session start or join algorithms.
+8,10c7
+< The user agent might not support continuous availability monitoring due to platform or power consumption restrictions, for example. In this case the Promise returned by getAvailability() is rejected and the algorithm for monitoring the list of available presentation displays will only run as part of the session start or join algorithms.
 < 
 < 6.4.1 Monitoring the list of available presentation displays
 ---

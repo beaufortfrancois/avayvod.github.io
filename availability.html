@@ -459,7 +459,7 @@
   var handleAvailabilityChange = function(available) {
     castBtn.style.display = available ? "inline" : "none";
   };
-  // availablechange event is fired when the presentation display availability changes
+  // Promise is resolved as soon as the presentation display availability is known.
   navigator.presentation.getAvailability().then(function(availabilityObj) {
     // availability.current may be kept up-to-date by the UA as long as the availability
     // object is alive. It is advised for the web developers to discard of the object
@@ -922,8 +922,8 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
           In order to satisfy the <a href="https://github.com/w3c/presentation-api/blob/gh-pages/uc-req.md#req08-power-saving-friendly">
           power saving non-functional requirement</a>, the user agent must keep
           track of the number of <a href="#availability"><code>Availability</code></a> objects requested
-          through the <a href="#getavailability"><code>getAvailability</code></a> method. The UA may also keep
-          track of whether the page holding the <a href="#availability"><code>Availability</code></a>
+          through the <code>getAvailability()</code> method. The UA may also
+          keep track of whether the page holding the <a href="#availability"><code>Availability</code></a>
           object is in the foreground. Using this information, implementation
           specific discovery of <span title="presentation-display">presentation
           displays</span> can be resumed or suspended, in order to save power.
@@ -954,7 +954,7 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
           </p>
           <p>
             While there are alive <a href="#availability">Availability</a> objects, the user
-            agent must continuously keep track of the <a href="#list-of-available-presentation-displays">list of available
+            agent should continuously keep track of the <a href="#list-of-available-presentation-displays">list of available
             presentation displays</a> and repeat the following steps:
           </p>
           <ol>
@@ -966,26 +966,29 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
             </li>
             <li>If the <a href="#list-of-available-presentation-displays">list of available presentation displays</a> is
             empty and <a href="#newdisplays">newDisplays</a> is not empty, then
+            for each alive <a href="#availability"><code>Availability</code></a> object:
               <ol>
+                <li>Set the object's <code>current</code> property to
+                <code>true</code>.
+                </li>
                 <li>
                   <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">Queue a task</a> to
                   <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#concept-event-fire" title="concept-event-fire">fire an event</a> named
-                  <code>change</code> at each <code>Available</code> object and
-                  set the object's <code>current</code> property to
-                  <code>true</code>.
+                  <code>change</code> at the object.
                 </li>
               </ol>
             </li>
             <li>If the <a href="#list-of-available-presentation-displays">list of available presentation displays</a> is
-            not empty and <a href="#newdisplays">newDisplays</a> is empty,
-            then:
+            not empty and <a href="#newdisplays">newDisplays</a> is empty, then
+            for each alive <a href="#availability"><code>Availability</code></a> object:
               <ol>
+                <li>Set the object's <code>current</code> property to
+                <code>false</code>.
+                </li>
                 <li>
                   <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">Queue a task</a> to
                   <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#concept-event-fire" title="concept-event-fire">fire an event</a> named
-                  <code>change</code> at each <code>Available</code> object and
-                  set the object's <code>current</code> property to
-                  <code>false</code>.
+                  <code>change</code> at the object.
                 </li>
               </ol>
             </li>
@@ -995,9 +998,9 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
           </ol>
           <p class="note">
             The mechanism used to monitor <a href="#presentation-display">presention displays</a> availability is
-            left to the user agent. The user agent may choose search for
-            screens at any time, not just when event handlers are added to
-            <code>NavigatorPresentation.onavailablechange</code>.
+            left to the user agent. The user agent may choose to search for
+            displays at any time, not just when there's an alive
+            <a href="#availability"><code>Availability</code></a> object.
           </p>
           <p>
             When the user agent is to <dfn id="cancel-monitoring-the-list-of-available-presentation-displays">cancel monitoring the list of
@@ -1011,12 +1014,17 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
             <li>Set the <a href="#list-of-available-presentation-displays">list of available presentation displays</a> to
             empty.
             </li>
-            <li>
-              <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">Queue a task</a> to
-              <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#concept-event-fire" title="concept-event-fire">fire
-              an event</a> named <code>change</code> at each
-              <code>Available</code> object and set the object's
-              <code>current</code> property to <code>false</code>.
+            <li>For each alive <a href="#availability"><code>Availability</code></a> object:
+              <ol>
+                <li>Set the object's <code>current</code> property to
+                <code>false</code>.
+                </li>
+                <li>
+                  <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">Queue a task</a> to
+                  <a class="external" data-anolis-spec="w3c-html" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#concept-event-fire" title="concept-event-fire">fire an event</a> named
+                  <code>change</code> at the object.
+                </li>
+              </ol>
             </li>
           </ol>
         </section>
@@ -1189,7 +1197,7 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
           <p class="open-issue">
             ISSUE: Do we want to distinguish the permission-denied outcome from
             the no-screens-available outcome? Developers would be able to infer
-            it anyway from <code>availablechange</code>.
+            it anyway from <code>getAvailability()</code>.
           </p>
         </section>
         <section>
