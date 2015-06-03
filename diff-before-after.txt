@@ -1,0 +1,55 @@
+1c1
+< In order to satisfy the power saving non-functional requirement, the user agent must keep track of the number of EventHandlers registered to the onavailablechange event. Using this information, implementation specific discovery of presentation displays can be resumed or suspended, in order to save power.
+---
+> In order to satisfy the power saving non-functional requirement, the user agent must keep track of the number of Availability objects requested through the getAvailability() method. The UA may also keep track of whether the page holding the Availability object is in the foreground. Using this information, implementation specific discovery of presentation displays can be resumed or suspended, in order to save power.
+3c3
+< The user agent must keep a list of available presentation displays. According to the number of event handlers for onavailablechange, the user agent must also keep the list up to date by running the algorithm for monitoring the list of available presentation displays.
+---
+> The user agent must keep a list of available presentation displays. According to the number of alive Availability objects, the user agent must also keep the list up to date by running the algorithm for monitoring the list of available presentation displays.
+5c5
+< 6.4.4.1 Adding an EventHandler to onavailablechange
+---
+> The user agent might not support continuous availability monitoring due to platform or power consumption restrictions, for example. In this case the Promise returned by getAvailability() is rejected and the algorithm for monitoring the list of available presentation displays will only run as part of the session start algorithm.
+7,14c7
+< When an event handler is added to the list of event handlers registered for the onavailablechange event, the user agent must run the algorithm to monitor the list of available presentation displays.
+< 
+< 6.4.4.2 Removing an EventHandler
+< 
+< When an event handler is removed from the list of event handlers registered to the onavailablechange event, the user agent must run the following steps:
+< 
+< If the removed event handler was the last one in the list, cancel monitoring the list of available presentation displays.
+< 6.4.4.3 Monitoring the list of available presentation displays
+---
+> 6.4.1 Monitoring the list of available presentation displays
+18c11
+< While there are event handlers added to NavigatorPresentation.onavailablechange, the user agent must continuously keep track the list of available presentation displays and repeat the following steps:
+---
+> While there are alive Availability objects, the user agent should continuously keep track of the list of available presentation displays and repeat the following steps:
+20c13
+< Queue a task to retrieve the list of curently available presentation displays and let newDisplays be this list.
+---
+> Queue a task to retrieve the list of currently available presentation displays and let newDisplays be this list.
+22,25c15,20
+< If the list of available presentation displays is empty and newDisplays is not empty, then
+< Queue a task to fire an event named availablechange at NavigatorPresentation with the event's available property set to true.
+< If the list of available presentation displays is not empty and newDisplays is empty, then:
+< Queue a task to fire an event named availablechange at NavigatorPresentation with the event's available property set to false.
+---
+> If the list of available presentation displays is empty and newDisplays is not empty, then for each alive Availability object:
+> Set the object's value property to true.
+> Queue a task to fire an event named change at the object.
+> If the list of available presentation displays is not empty and newDisplays is empty, then for each alive Availability object:
+> Set the object's value property to false.
+> Queue a task to fire an event named change at the object.
+27c22
+< The mechanism used to monitor presention displays availability is left to the user agent. The user agent may choose search for displays at any time, not just when event handlers are added to NavigatorPresentation.onavailablechange.
+---
+> The mechanism used to monitor presention displays availability is left to the user agent. The user agent may choose to search for displays at any time, not just when there's an alive Availability object.
+33c28,30
+< Queue a task to fire an event named availablechange at NavigatorPresentation with the event's available property set to false.
+\ No newline at end of file
+---
+> For each alive Availability object:
+> Set the object's value property to false.
+> Queue a task to fire an event named change at the object.
+\ No newline at end of file
