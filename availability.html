@@ -919,13 +919,13 @@ interface <dfn id="presentationsession">PresentationSession</dfn> : EventTarget 
           value that the algorithm determined.
         </p>
         <p>
-          In order to satisfy the <span title="non-functional-requirements">power saving non-functionional
-          requirements</span> the user agent must keep track of the number of
-          <a href="#availability"><code>Availability</code></a> objects requested through the
-          <a href="#getavailability"><code>getAvailability</code></a> method. The UA may also keep track of
-          whether the page holding the <a href="#availability"><code>Availability</code></a> object is in
-          the foreground. Using this information, implementation specific
-          discovery of <span title="presentation-display">presentation
+          In order to satisfy the <a href="https://github.com/w3c/presentation-api/blob/gh-pages/uc-req.md#req08-power-saving-friendly">
+          power saving non-functional requirement</a>, the user agent must keep
+          track of the number of <a href="#availability"><code>Availability</code></a> objects requested
+          through the <a href="#getavailability"><code>getAvailability</code></a> method. The UA may also keep
+          track of whether the page holding the <a href="#availability"><code>Availability</code></a>
+          object is in the foreground. Using this information, implementation
+          specific discovery of <span title="presentation-display">presentation
           displays</span> can be resumed or suspended, in order to save power.
         </p>
         <p>
