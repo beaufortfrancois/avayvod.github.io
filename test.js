@@ -1,7 +1,10 @@
 function printDefaultRequest() {
   appendMessage('defaultRequest = ' + navigator.presentation.defaultRequest);
-  if (navigator.presentation.defaultRequest)
+  if (navigator.presentation.defaultRequest) {
     appendMessage('defaultRequest.onsessionconnect = ' + navigator.presentation.defaultRequest.onsessionconnect);
+    if (navigator.presentation.defaultRequest.presentationURL)
+      appendMessage('defaultRequest.presentationURL = ' + navigator.presentation.defaultRequest.presentationURL);
+  }
 }
 
 function defaultRequestLoop() {
