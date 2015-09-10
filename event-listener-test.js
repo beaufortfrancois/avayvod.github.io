@@ -4,7 +4,7 @@ function print() {
 
 function loop() {
   print();
-  setTimeout(loop, 10000);
+  setTimeout(loop, 2000);
 }
 
 /**
