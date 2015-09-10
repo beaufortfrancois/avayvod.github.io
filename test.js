@@ -1,7 +1,7 @@
 function printDefaultRequest() {
   appendMessage('defaultRequest = ' + navigator.presentation.defaultRequest);
   if (navigator.presentation.defaultRequest) {
-    appendMessage('defaultRequest.onsessionconnect = ' + navigator.presentation.defaultRequest.onsessionconnect);
+    appendMessage('defaultRequest.onsessionconnect = ' + navigator.presentation.defaultRequest.onsessionconnect + ' === undefined ' + (navigator.presentation.defaultRequest.onsessionconnect === undefined));
     if (navigator.presentation.defaultRequest.presentationURL)
       appendMessage('defaultRequest.presentationURL = ' + navigator.presentation.defaultRequest.presentationURL);
   }
