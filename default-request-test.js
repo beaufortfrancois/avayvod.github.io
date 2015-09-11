@@ -9,7 +9,7 @@ function printDefaultRequest() {
 
 function defaultRequestLoop() {
   printDefaultRequest();
-  setTimeout(defaultRequestLoop, 10000);
+  setTimeout(defaultRequestLoop, 2000);
 }
 
 /**
