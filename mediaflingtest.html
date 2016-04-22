@@ -9,25 +9,45 @@
     </head>
 
     <body>
+        <h1>Media that should cast</h1>
+        <p>
+            An .mp3 audio
+            <br>
+            <audio controls src="tetris.mp3"/>
+        </p>
         <p>
             A .webm video with a poster
             <br>
             <video poster="BigBuck_360x240.jpg" controls src="BigBuck.webm" type="video/webm"/>
         </p>
         <p>
+            An HLS video, with CORS headers
+            <br>
+            <video controls src="http://cdn.metacafe.com/videos/11344000/11344257/11344257.m3u8"/>
+        </p>
+        <p>
             YouTube embedded video
             <br>
             <iframe width="560" height="315" src="//www.youtube.com/embed/gHGDN9-oFJE" frameborder="0" allowfullscreen></iframe>
         </p>
+        <h1>Media that shouldn't cast</h1>
         <p>
-            HLS video, no CORS headers (doesn't play on Cast)
+            An .ogg audio
+            <br>
+            <audio controls src="tetris.ogg"/>
+        </p>
+        <p>
+            An .ogv video
+            <br>
+            <video controls src="BigBuck.theora.ogv"/>
+        </p>
+        <p>
+            HLS video, no CORS headers
             <br>
             <video controls src="http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"/>
         </p>
         <p>
-            Another HLS video, with CORS headers (does play on Cast)
-            <br>
-            <video controls src="http://cdn.metacafe.com/videos/11344000/11344257/11344257.m3u8"/>
+            
         </p>
     </body>
 </html>
