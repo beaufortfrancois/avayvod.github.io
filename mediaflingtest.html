@@ -1,187 +1,33 @@
 
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-    <title>A bunch of test cases for video flinging</title>
-    <style>
-    p {margin-left:1-px; font-size:150%;}
-    :-webkit-full-screen > video{ width: 100%; height:100%; }
-    :-webkit-full-screen { width: 100%; height:100%; }
-  </style>
-  <script type="text/javascript">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <title>A bunch of test cases for media flinging</title>
+        <style>
+            p {margin-left:1-px; font-size:150%;}
+        </style>
+    </head>
 
-    var fullscreenElement = document.webkitCurrentFullScreenElement;
-
-    document.addEventListener('webkitfullscreenchange', function() {
-        var shouldPauseVideo = false;
-        var shouldStopVideo = false;
-        var shouldContinueVideo = false;
-
-        var pauseVideoElem = document.getElementById('pause_video_radio');
-        shouldPauseVideo = pauseVideoElem.checked;
-        var stopVideoElem = document.getElementById('stop_video_radio');
-        shouldStopVideo = stopVideoElem.checked;
-        var continueVideoElem = document.getElementById('continue_video_radio');
-        shouldContinueVideo = continueVideoElem.checked;
-
-        if (shouldContinueVideo)
-            return;
-
-        if (!document.webkitIsFullScreen)  {
-            if (fullscreenElement.tagName == "VIDEO") {
-                if (shouldPauseVideo)
-                    fullscreenElement.pause();
-                else if (shouldStopVideo)
-                    stopVideo(fullscreenElement);
-            } else {
-                var videoElem = fullscreenElement.getElementsByTagName('video')[0];
-                if (shouldPauseVideo)
-                    videoElem.pause();
-                else
-                    stopVideo(videElem);
-            }
-        }
-    }, false);
-
-    function stopVideo(videoElem) {
-        videoElem.pause();
-        videoElem.currentTime = 0;
-    }
-
-    function playVideoFullscreen(id) {
-        var video = document.getElementById(id);
-        makeElementFullscreen(id);
-        video.play();
-    }
-
-    function makeElementFullscreen(id) {
-        var elem = document.getElementById(id);
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        }
-        else if (elem.webkitRequestFullScreen) {
-            elem.webkitRequestFullScreen();
-            fullscreenElement = elem;
-        }
-    }
-
-    function toggleChildVideoFullscreen(id) {
-        var parent = document.getElementById(id);
-        if (!document.webkitIsFullScreen) {
-            makeElementFullscreen(id);
-            var videoElem = parent.getElementsByTagName('video')[0];
-            videoElem.play();
-        } else {
-            document.webkitCancelFullScreen();
-        }
-    }
-
-    function toggleFullscreen(id) {
-        id.webkitCancelFullscreen();
-    }
-
-    function onFullscreenChangeEvent() {
-        alert(document.fullscreenElement.tagName);
-        var elem = document.fullscreenElement;
-        if (elem.tagName == "video") {
-            elem.pause();
-        } else {
-            var videoElem = elem.getElementsByTagName('video')[0];
-            videoElem.pause();
-        }
-    }
-
-</script></head>
-
-  <body>
-    <form>
-        <input type="radio" name="fullscreen_exit_behavior" checked="" id="pause_video_radio" value="pause_video" style="-webkit-transform: scale(2.5);">
-            <span style="font-size:150%;">Pause videos on exit fullscreen</span>
-
-        <br>
-        <br>
-        <input type="radio" name="fullscreen_exit_behavior" id="stop_video_radio" value="stop_video" style="-webkit-transform: scale(2.5);">
-            <span style="font-size:150%;">Stop videos on exit fullscreen</span>
-
-        <br>
-        <br>
-        <input type="radio" name="fullscreen_exit_behavior" id="continue_video_radio" value="continue_video" style="-webkit-transform: scale(2.5);">
-            <span style="font-size:150%;">Continue videos on exit fullscreen</span>
-
-    </form>
-    <hr>
-    <p>
-    Plain video tag
-    <br>
-    <video poster="BigBuck_360x240.jpg" controls="">
-          <source src="BigBuck.webm" type="video/webm">
-    </video>
-    </p>
-    <br>
-    <p>
-    Video tag, enters fullscreen on click
-    <br>
-    <video id="fullscreen_video" onclick="playVideoFullscreen('fullscreen_video')" width="300px" height="150px">
-          <source src="BigBuck.webm" type="video/webm">
-    </video>
-    </p>
-    <hr>
-    <p>
-    Video tag, has a poster image and enters fullscreen on click
-    <br>
-    <video id="fullscreen_video_with_poster" poster="BigBuck_360x240.jpg" onclick="playVideoFullscreen('fullscreen_video_with_poster')" preload="">
-          <source src="BigBuck.webm" type="video/webm">
-    </video>
-    </p>
-    <hr>
-    <p>
-    YouTube embedded video
-    <br/>
-    <iframe width="560" height="315" src="//www.youtube.com/embed/gHGDN9-oFJE" frameborder="0" allowfullscreen></iframe>
-    </p>
-    <hr/>
-    <p>
-    YouTube embedded video
-    <br/>
-    <iframe width="560" height="315" src="//www.youtube.com/embed/nnsSUqgkDwU" frameborder="0" allowfullscreen></iframe>
-    </p>
-    <hr/>
-    <p>
-    Image with onclick with 1px x 1px hidden video tag
-    </p><div id="play_image" style="border-style:solid; border-width:5px; border-color:orange; max-width:200px; max-height:200px;" onclick="playVideoFullscreen('hidden_video')">
-        <img src="play_button.png"/>
-    </div>
-    <video id="hidden_video" hidden="" style="width:1px; height:1px">
-          <source src="BigBuck.webm" type="video/webm">
-    </video>
-    <p></p>
-    <hr>
-    <p>
-    Video tag does not enter fullscreen, wrapping parent is instead resized
-    </p><div id="wrapper" onclick="toggleChildVideoFullscreen('wrapper')" style="background-color:#d0d0d0">
+    <body>
         <p>
-            I am a wrapper around a fullscreen video
+            A .webm video with a poster
+            <br>
+            <video poster="BigBuck_360x240.jpg" controls src="BigBuck.webm" type="video/webm"/>
         </p>
-        <video controls="" style="max-width:100%;max-height:100%">
-          <source src="BigBuck.webm" type="video/webm">
-        </video>
         <p>
-            I am still a wrapper around a fullscreen video
+            YouTube embedded video
+            <br>
+            <iframe width="560" height="315" src="//www.youtube.com/embed/gHGDN9-oFJE" frameborder="0" allowfullscreen></iframe>
         </p>
-    </div>
-    <p></p>
-    <hr>
-    <p>
-    HLS video, no CORS headers (doesn't play on Cast)
-    </p>
-    <video controls src="http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8">
-        HLS is not supported by this browser
-    </video>
-    <p></p>
-    <hr>
-    <p>
-    Another HLS video, no CORS headers (does play on Cast)
-    </p>
-    <video controls src="http://cdn.metacafe.com/videos/11344000/11344257/11344257.m3u8">
-        HLS is not supported by this browser
-    </video>
-    <p></p>
-</body></html>
+        <p>
+            HLS video, no CORS headers (doesn't play on Cast)
+            <br>
+            <video controls src="http://devimages.apple.com.edgekey.net/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"/>
+        </p>
+        <p>
+            Another HLS video, with CORS headers (does play on Cast)
+            <br>
+            <video controls src="http://cdn.metacafe.com/videos/11344000/11344257/11344257.m3u8"/>
+        </p>
+    </body>
+</html>
