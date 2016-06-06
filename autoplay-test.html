@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Media Autoplay Test Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <section>
+    <h2>HTML5 Audio</h2>
+    <h3>Tetris<h3>
+    <audio id=tetris controls autoplay>
+      <source src="tetris.mp3" type='audio/mp3'>
+      <source src="tetris.ogg" type='audio/ogg; codecs=vorbis'>
+    </audio>
+  </section>
+
+  <section>
+    <h2>HTML5 Video</h2>
+    <video id="html5-video" controls autoplay width='300' height='200'
+      poster="BigBuck_360x240.jpg">
+      <source src="BigBuck.m4v">
+      <source src="BigBuck.webm" type="video/webm">
+      <source src="BigBuck.theora.ogv" type="video/ogg">
+    </video>
+  </section>
+  
+  <section>
+    <h2>Silent video</h2>
+    <video id="html5-video-silent" controls autoplay width='300' height='200'>
+      <source src="https://zippy.gfycat.com/EsteemedDescriptiveAttwatersprairiechicken.webm">
+    </video>
+  </section>
+</body>
+</html>
