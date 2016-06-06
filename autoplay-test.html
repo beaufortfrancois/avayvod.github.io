@@ -3,11 +3,17 @@
 <head>
   <title>Media Muted Autoplay Test Page</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    window.onload = function() {
+      var videoElem = document.findElementById('html5-video');
+      videoElem.play().then(setTimeout(function() { videoElem.muted = false; }, 10000));
+    };
+  </script>
 </head>
 <body>
   <section>
     <h2>HTML5 Video</h2>
-    <video id="html5-video" controls autoplay width='300' height='200' muted
+    <video id="html5-video" controls width='300' height='200' muted
       poster="BigBuck_360x240.jpg">
       <source src="BigBuck.m4v">
       <source src="BigBuck.webm" type="video/webm">
