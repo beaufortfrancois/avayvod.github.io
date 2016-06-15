@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Media Muted Autoplay Test Page</title>
+  <title>Video element with MediaStream Autoplay Test Page</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>
     window.onload = function() {
       var videoElem = document.getElementById('html5-video');
-      videoElem.src = URL.createObjectURL(new MediaSource());
-      videoElem.play().then(function() {
-        videoElem.src = "BigBuck.webm";
-        videoElem.play();
-      });
+      navigator.webkitGetUserMedia(
+        {video:true},
+        function (stream) {
+          video.onplaying = function() {
+            video.src = "BigBuck.webm";
+            video.play();
+          };
+          video.srcObject = stream;
+        }
     };
   </script>
 </head>
@@ -18,10 +22,7 @@
   <section>
     <h2>HTML5 Video</h2>
     <video id="html5-video" controls
-      poster="BigBuck_360x240.jpg">
-      <source src="BigBuck.m4v">
-      <source src="BigBuck.webm" type="video/webm">
-      <source src="BigBuck.theora.ogv" type="video/ogg">
+      poster="BigBuck_360x240.jpg" autoplay>
     </video>
   </section>
 </body>
