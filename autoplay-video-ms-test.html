@@ -10,11 +10,12 @@
           {video:true},
           function (stream) {
             v.onplaying = function() {
+              v.srcObject = null;
+              v.onplaying = null;
+              v.src = 'BigBuck.webm';
+              v.play();
               for (t of stream.getTracks())
                 t.stop();
-              v.src = 'BigBuck.webm';
-              v.onplaying = null;
-              v.play();
             };
             v.srcObject = stream;
           }, function() {
