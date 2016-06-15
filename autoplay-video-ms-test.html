@@ -10,10 +10,12 @@
           {video:true},
           function (stream) {
             video.onplaying = function() {
-              video.src = "BigBuck.webm";
+              video.src = 'BigBuck.webm';
               video.play();
             };
             video.srcObject = stream;
+          }, function() {
+            console.log('Didn't get the media stream.);
           });
     };
   </script>
