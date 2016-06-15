@@ -7,10 +7,10 @@
     window.onload = function() {
       var videoElem = document.getElementById('html5-video');
       videoElem.src = URL.createObjectURL(new MediaSource());
-      setTimeout(function() {
+      videoElem.play().then(function() {
         videoElem.src = "BigBuck.webm";
         videoElem.play();
-      }, 100);
+      });
     };
   </script>
 </head>
