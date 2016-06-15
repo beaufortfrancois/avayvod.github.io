@@ -10,6 +10,7 @@
           {video:true},
           function (stream) {
             v.onplaying = function() {
+              v.srcObject = null;
               v.src = 'BigBuck.webm';
               v.play();
             };
