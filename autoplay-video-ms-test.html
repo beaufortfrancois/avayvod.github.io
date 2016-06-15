@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>
     window.onload = function() {
-      var videoElem = document.getElementById('html5-video');
+      var v = document.getElementById('html5-video');
       navigator.webkitGetUserMedia(
           {video:true},
           function (stream) {
-            video.onplaying = function() {
-              video.src = 'BigBuck.webm';
-              video.play();
+            v.onplaying = function() {
+              v.src = 'BigBuck.webm';
+              v.play();
             };
-            video.srcObject = stream;
+            v.srcObject = stream;
           }, function() {
             console.log('Didn\'t get the media stream.');
           });
