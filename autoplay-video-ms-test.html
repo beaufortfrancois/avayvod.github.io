@@ -9,14 +9,16 @@
       navigator.webkitGetUserMedia(
           { video: true },
           function (stream) {
+            v.autoplay = true;
             v.srcObject = stream;
-            v.play().then(function() {
+            v.onplaying = function() {
+              v.onplaying = null;
               v.srcObject = null;
               v.src = 'BigBuck.webm';
               v.play();
               for (t of stream.getTracks())
                 t.stop();
-            });
+            };
           }, function() {
             console.log('Didn\'t get the media stream.');
           });
