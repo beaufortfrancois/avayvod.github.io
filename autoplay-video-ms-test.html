@@ -9,15 +9,14 @@
       navigator.webkitGetUserMedia(
           {video:true},
           function (stream) {
-            v.onplaying = function() {
+            v.srcObject = stream;
+            v.play().then(function() {
               v.srcObject = null;
-              v.onplaying = null;
               v.src = 'BigBuck.webm';
               v.play();
               for (t of stream.getTracks())
                 t.stop();
-            };
-            v.srcObject = stream;
+            });
           }, function() {
             console.log('Didn\'t get the media stream.');
           });
@@ -27,8 +26,7 @@
 <body>
   <section>
     <h2>HTML5 Video</h2>
-    <video id="html5-video" controls
-      poster="BigBuck_360x240.jpg" autoplay>
+    <video id="html5-video" controls poster="BigBuck_360x240.jpg">
     </video>
   </section>
 </body>
