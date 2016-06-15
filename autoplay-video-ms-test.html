@@ -12,6 +12,7 @@
             v.onplaying = function() {
               v.srcObject = null;
               v.src = 'BigBuck.webm';
+              v.onplaying = null;
               v.play();
             };
             v.srcObject = stream;
