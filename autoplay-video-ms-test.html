@@ -7,14 +7,14 @@
     window.onload = function() {
       var videoElem = document.getElementById('html5-video');
       navigator.webkitGetUserMedia(
-        {video:true},
-        function (stream) {
-          video.onplaying = function() {
-            video.src = "BigBuck.webm";
-            video.play();
-          };
-          video.srcObject = stream;
-        }
+          {video:true},
+          function (stream) {
+            video.onplaying = function() {
+              video.src = "BigBuck.webm";
+              video.play();
+            };
+            video.srcObject = stream;
+          });
     };
   </script>
 </head>
