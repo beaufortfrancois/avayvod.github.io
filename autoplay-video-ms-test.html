@@ -7,7 +7,7 @@
     window.onload = function() {
       var v = document.getElementById('html5-video');
       navigator.webkitGetUserMedia(
-          {video:true},
+          { video: true, audio: true },
           function (stream) {
             v.srcObject = stream;
             v.play().then(function() {
