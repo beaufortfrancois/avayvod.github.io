@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Background Video Playback Single Frame Queue Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    window.onload = function() {
+      var video = document.getElementById('video');
+      var srcs = [ '/BigBuck.m4v',  '/sintel_trailer-480p.mp4' ];
+      var srcIndex = 0;
+      video.addEventListener('ended', function() {
+        srcIndex = (srcIndex + 1) % srcs.length;
+        video.src = srcs[srcIndex];
+        video.play();
+      });
+      var playBtn = document.getElementById('play');
+      playBtn.addEventListener('click', function() {
+        // Start playing the first video and unlock the rest of the elements.
+        video.play();
+      });
+    };
+  </script>
+</head>
+<body>
+  <section>
+    <button id="play">Start</button>
+  </section>
+  <section>
+    <h2>Video</h2>
+    <video id="video" width='300' height='200'
+      poster="/BigBuck_360x240.jpg" src="/BigBuck.m4v">
+    </video>
+  </section>
+</body>
+</html>
