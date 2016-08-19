@@ -185,5 +185,25 @@
         </div></div>
       </div>
     </div>
+   <script>
+    var v = null;
+    function whywhatSetupLog() {
+     if (v != null) return;
+     
+     var vs = document.getElementsByTagName('video');
+     if (vs.length == 0) {
+      setTimeout(1000, whywhatSetupLog);
+      return;
+     }
+     
+     v = vs[0];
+     whywhatLogVideoElement();
+    }
+    
+    function whywhatLogVideoElement() {
+     console.log('video element: currentTime = ' + v.currentTime + ', readyState = ' + v.readyState + ', buffered = ' + v.buffered);
+     setTimeout(1000, whywhatLogVideoElement);
+    }
+   </script>
   </body>
 </html>
