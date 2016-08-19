@@ -198,7 +198,7 @@
      
      v = vs[0];
      whywhatLogVideoElement();
-     document.visibilitychange = function() {
+     document.onvisibilitychange = function() {
       console.log('document is hidden: ' + document.hidden);
       v.videoTracks[0].selected = !document.hidden;
      }
