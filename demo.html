@@ -192,7 +192,7 @@
      
      var vs = document.getElementsByTagName('video');
      if (vs.length == 0) {
-      setTimeout(1000, whywhatSetupLog);
+      setTimeout(whywhatSetupLog, 1000);
       return;
      }
      
@@ -202,7 +202,7 @@
     
     function whywhatLogVideoElement() {
      console.log('video element: currentTime = ' + v.currentTime + ', readyState = ' + v.readyState + ', buffered = ' + v.buffered);
-     setTimeout(1000, whywhatLogVideoElement);
+     setTimeout(whywhatLogVideoElement, 1000);
     }
    </script>
   </body>
