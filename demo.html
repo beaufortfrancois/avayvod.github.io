@@ -198,10 +198,10 @@
      
      v = vs[0];
      whywhatLogVideoElement();
-     document.onvisibilitychange = function() {
+     document.addEventListener('visibilitychange', function() {
       console.log('document is hidden: ' + document.hidden);
       v.videoTracks[0].selected = !document.hidden;
-     }
+     });
     }
     
     function whywhatLogVideoElement() {
