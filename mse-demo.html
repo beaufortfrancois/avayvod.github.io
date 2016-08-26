@@ -128,14 +128,14 @@ video.src = window.URL.createObjectURL(ms);
 
 ms.addEventListener('sourceopen', function(e) {
   ...
-  var sourceBuffer = ms.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
+  var sourceBuffer = ms.addSourceBuffer('video/mp4; codecs="h264"');
   sourceBuffer.appendBuffer(oneVideoWebMChunk);
   ....
 }, false);
 </code></pre>
 
 <script>
-var FILE = 'test.webm';
+var FILE = 'https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4';
 var NUM_CHUNKS = 5;
 var video = document.querySelector('video');
 
@@ -151,12 +151,12 @@ document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
 video.src = window.URL.createObjectURL(mediaSource);
 
 function callback(e) {
-  var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
+  var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="h264"');
 
   logger.log('mediaSource readyState: ' + this.readyState);
 
   GET(FILE, function(uInt8Array) {
-    var file = new Blob([uInt8Array], {type: 'video/webm'});
+    var file = new Blob([uInt8Array], {type: 'video/mp4'});
     var chunkSize = Math.ceil(file.size / NUM_CHUNKS);
 
     logger.log('num chunks:' + NUM_CHUNKS);
