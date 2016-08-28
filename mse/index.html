@@ -16,19 +16,23 @@
 
 <script>
 var FILE_PREFIX = 'file-chunk-';
-var NUM_CHUNKS = 128;
+var NUM_CHUNKS = 124;
 var video = document.querySelector('video');
 var mediaSource = new MediaSource();
 video.src = window.URL.createObjectURL(mediaSource);
 
 var chunkIndex = 0;
 
+function chunkUrl(index) {
+  return FILE_PREFIX + ("000" + index).substr(-4);
+}
+
 function onSourceOpen(e) {
   var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
 
   logger.log('mediaSource readyState: ' + this.readyState);
 
-  getNextFileChunk(FILE_PREFIX + chunkIndex, appendNextFileChunk);
+  getNextFileChunk(chunkUrl(chunkIndex));
 }
   
 function appendNextFileChunk(uInt8Array) {
@@ -53,7 +57,7 @@ sourceBuffer.addEventListener('updateend', function OnUpdateEnd() {
     mediaSource.endOfStream();
   } else {
     ++chunkIndex;
-    getNextFileChunk(FILE_PREFIX + chunkIndex, appendNextFileChunk);
+    getNextFileChunk(chunkUrl(chunkIndex));
   }
 });
 
@@ -75,7 +79,7 @@ function getNextFileChunk(url, callback) {
       alert("Unexpected status code " + xhr.status + " for " + url);
       return false;
     }
-    callback(new Uint8Array(xhr.response));
+    appendNextFileChunk(new Uint8Array(xhr.response));
   };
 }
 </script>
