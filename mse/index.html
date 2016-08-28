@@ -82,7 +82,7 @@ function getNextFileChunk(url, callback) {
 }
 
 function chunkUrl(index) {
-  return FILE_PREFIX + ("000" + index).substr(-4);
+  return FILE_PREFIX + ("00" + index).substr(-3);
 }
 </script>
 <script>
