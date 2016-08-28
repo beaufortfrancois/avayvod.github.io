@@ -59,7 +59,6 @@ function appendNextFileChunk(uInt8Array) {
 
   reader.onload = function(e) {
     sourceBuffer.appendBuffer(new Uint8Array(e.target.result));
-    ++chunkIndex;
   };
 
   reader.readAsArrayBuffer(file);
