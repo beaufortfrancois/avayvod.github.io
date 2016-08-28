@@ -24,18 +24,31 @@ video.src = window.URL.createObjectURL(mediaSource);
 var chunkIndex = 0;
 var sourceBuffer = null;
 
-function chunkUrl(index) {
-  return FILE_PREFIX + ("000" + index).substr(-4);
-}
+mediaSource.addEventListener('sourceopen', onSourceOpen, false);
+mediaSource.addEventListener('sourceended', function(e) {
+  logger.log('mediaSource readyState: ' + this.readyState);
+}, false);
+
 
 function onSourceOpen(e) {
   sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
-
+  sourceBuffer.addEventListener('updateend', onUpdateEnd);
+  
   logger.log('mediaSource readyState: ' + this.readyState);
 
   getNextFileChunk(chunkUrl(chunkIndex));
 }
-  
+
+function onUpdateEnd() {
+  logger.log('updateend: ' + chunkIndex);
+  if (chunkIndex == NUM_CHUNKS - 1) {
+    mediaSource.endOfStream();
+  } else {
+    ++chunkIndex;
+    getNextFileChunk(chunkUrl(chunkIndex));
+  }
+}
+
 function appendNextFileChunk(uInt8Array) {
   var file = new Blob([uInt8Array], {type: 'video/mp4'});
   var chunkSize = file.size;
@@ -50,23 +63,7 @@ function appendNextFileChunk(uInt8Array) {
   };
 
   reader.readAsArrayBuffer(file);
-};
-
-sourceBuffer.addEventListener('updateend', function OnUpdateEnd() {
-  logger.log('updateend: ' + chunkIndex);
-  if (chunkIndex == NUM_CHUNKS - 1) {
-    mediaSource.endOfStream();
-  } else {
-    ++chunkIndex;
-    getNextFileChunk(chunkUrl(chunkIndex));
-  }
-});
-
-mediaSource.addEventListener('sourceopen', onSourceOpen, false);
-
-mediaSource.addEventListener('sourceended', function(e) {
-  logger.log('mediaSource readyState: ' + this.readyState);
-}, false);
+}
 
 function getNextFileChunk(url, callback) {
   logger.log('Downloading chunk: ' + url);
@@ -82,6 +79,10 @@ function getNextFileChunk(url, callback) {
     }
     appendNextFileChunk(new Uint8Array(xhr.response));
   };
+}
+
+function chunkUrl(index) {
+  return FILE_PREFIX + ("000" + index).substr(-4);
 }
 </script>
 <script>
