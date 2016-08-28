@@ -22,13 +22,14 @@ var mediaSource = new MediaSource();
 video.src = window.URL.createObjectURL(mediaSource);
 
 var chunkIndex = 0;
+var sourceBuffer = null;
 
 function chunkUrl(index) {
   return FILE_PREFIX + ("000" + index).substr(-4);
 }
 
 function onSourceOpen(e) {
-  var sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+  sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
 
   logger.log('mediaSource readyState: ' + this.readyState);
 
