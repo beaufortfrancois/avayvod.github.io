@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <title>An example for Remote Playback API</title>
+        <style>
+            p {margin-left:1-px; font-size:150%;}
+        </style>
+        <script>
+            window.onload = function() {
+                var remotePlaybackBtn = document.getElementById('remotePlaybackBtn');
+                var remotePlaybackText = document.getElementById('remotePlaybackText');
+                var videoElem = document.getElementById('videoElement');
+                var deviceAvailability = false;
+                
+                function handleAvailabilityChange(availability) {
+                  deviceAvailability = availability;
+                  updateRemotePlaybackBtnVisibility();
+                };
+
+                function updateRemotePlaybackBtnVisibility() {
+                    var visible = deviceAvailability && videoElem.remote.state == 'disconnected';
+                    remotePlaybackBtn.style.display = visible ? 'inline' : 'none';
+                };
+                
+                function switchToRemoteUI () {
+                    updateRemotePlaybackBtnVisibility();
+                    videoElem.style.display = 'none';
+                    remotePlaybackText.style.display = 'inline';
+                    if (videoElem.remote.state == 'connecting')
+                        remotePlaybackText.innerHTML = 'Connecting to the remote device';
+                    else
+                        remotePlaybackText.innerHTML = 'Connected to the remote device';
+                };
+
+                var switchToLocalUI = function() {
+                    updateRemotePlaybackBtnVisibility();
+                    videoElem.style.display = 'inline';
+                    remotePlaybackText.style.display = 'none';
+                };
+              
+                videoElem.remote.getAvailability().then(function(availability) {
+                    handleAvailabilityChange(availability.value);
+                    availability.onchange = function() {
+                      handleAvailabilityChange(this.value);
+                    };
+                }).catch(function() {
+                    handleAvailabilityChange(true);
+                });
+              
+                remotePlaybackBtn.onclick = function() {
+                    videoElem.remote.prompt().then(switchToRemoteUI);
+                };
+              
+                if (videoElem.remote.state != 'disconnected')
+                    switchToRemoteUI();
+                videoElem.remote.onstatechange = function(evt) {
+                    if (videoElem.remote.state != 'disconnected')
+                        switchToRemoteUI();
+                    else
+                        switchToLocalUI();
+                };
+            };
+        </script>
+    </head>
+    <body>
+        <p>
+            A video element
+            <br>
+            <div>
+                <video id="videoElement" poster="BigBuck_360x240.jpg" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4"></video>
+                <div id="remotePlaybackText" style="display: none;"></div>
+            </div>
+            <br>
+            <button id="remotePlaybackBtn" style="display: none;">Play remotely</button>
+        </p>
+    </body>
+</html>
