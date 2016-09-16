@@ -7,23 +7,23 @@
         </style>
         <script>
             window.onload = function() {
-                var remotePlaybackBtn = document.getElementById('remotePlaybackBtn');
+                var promptBtn = document.getElementById('promptBtn');
+                var availabilityText = document.getElementById('availabilityText');
                 var remotePlaybackText = document.getElementById('remotePlaybackText');
                 var videoElem = document.getElementById('videoElement');
                 var deviceAvailability = false;
+                var attributeBtn = document.getElementById('toggleDisableRemotePlaybackBtn');
                 
                 function handleAvailabilityChange(availability) {
                   deviceAvailability = availability;
-                  updateRemotePlaybackBtnVisibility();
+                  updateAvailabilityText();
                 };
 
-                function updateRemotePlaybackBtnVisibility() {
-                    var visible = deviceAvailability && videoElem.remote.state == 'disconnected';
-                    remotePlaybackBtn.style.display = visible ? 'inline' : 'none';
+                function updateAvailabilityText() {
+                    availabilityText.innerHTML = deviceAvailability ? 'device available' : 'device unavailable';
                 };
                 
                 function switchToRemoteUI () {
-                    updateRemotePlaybackBtnVisibility();
                     videoElem.style.display = 'none';
                     remotePlaybackText.style.display = 'inline';
                     if (videoElem.remote.state == 'connecting')
@@ -33,7 +33,6 @@
                 };
 
                 var switchToLocalUI = function() {
-                    updateRemotePlaybackBtnVisibility();
                     videoElem.style.display = 'inline';
                     remotePlaybackText.style.display = 'none';
                 };
@@ -47,9 +46,19 @@
                     handleAvailabilityChange(true);
                 });
               
-                remotePlaybackBtn.onclick = function() {
+                promptBtn.onclick = function() {
                     videoElem.remote.prompt().then(switchToRemoteUI);
                 };
+                
+                attributeBtn.onclick = function() {
+                    if (videoElem.disableRemotePlayback) {
+                        videoElem.disableRemotePlayback = null;
+                        attributeBtn.innerHTML = 'Disable remote playback';
+                    } else {
+                        videoElem.disableRemotePlayback = true;
+                        attributeBtn.innerHTML = 'Enable remote playback';
+                    }
+                }
               
                 if (videoElem.remote.state != 'disconnected')
                     switchToRemoteUI();
@@ -68,10 +77,12 @@
             <br>
             <div>
                 <video id="videoElement" disableRemotePlayback src="/sintel_trailer-480p.mp4" type="video/mp4"></video>
+                <div id="availabilityText" style="display: none;"></div>
                 <div id="remotePlaybackText" style="display: none;"></div>
             </div>
             <br>
-            <button id="remotePlaybackBtn" style="display: none;">Play remotely</button>
+            <button id="promptBtn">Prompt</button>
+            <button id="toggleDisableRemotePlaybackBtn">Disable remote playback</button>
         </p>
     </body>
 </html>
