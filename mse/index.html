@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,8 +16,101 @@
 </section>
 
 <script>
-var FILE_PREFIX = 'file-chunk-';
-var NUM_CHUNKS = 124;
+var BYTE_RANGES = [
+'0-10033',
+'10034-1118801',
+'1118802-2411290',
+'2411291-3455781',
+'3455782-4769240',
+'4769241-6540258',
+'6540259-8424381',
+'8424382-9913813',
+'9913814-10967036',
+'10967037-11888168',
+'11888169-12685202',
+'12685203-13571077',
+'13571078-15026308',
+'15026309-16192474',
+'16192475-17029595',
+'17029596-17821138',
+'17821139-19007407',
+'19007408-20313632',
+'20313633-21899489',
+'21899490-24656382',
+'24656383-26565472',
+'26565473-28277005',
+'28277006-30040144',
+'30040145-31154840',
+'31154841-32565230',
+'32565231-34328892',
+'34328893-36777783',
+'36777784-38252701',
+'38252702-39570110',
+'39570111-41365801',
+'41365802-43292412',
+'43292413-45055823',
+'45055824-46852911',
+'46852912-48806276',
+'48806277-50825212',
+'50825213-52040573',
+'52040574-53379012',
+'53379013-54538456',
+'54538457-55969949',
+'55969950-59500000',
+'59500001-61483319',
+'61483320-63081889',
+'63081890-64342672',
+'64342673-65369571',
+'65369572-66426007',
+'66426008-67274337',
+'67274338-68531933',
+'68531934-69733660',
+'69733661-71356678',
+'71356679-72213251',
+'72213252-72976466',
+'72976467-74241036',
+'74241037-75220091',
+'75220092-76639418',
+'76639419-78064076',
+'78064077-80277151',
+'80277152-82310975',
+'82310976-85078143',
+'85078144-87061236',
+'87061237-88917769',
+'88917770-90359887',
+'90359888-92094896',
+'92094897-93145692',
+'93145693-94387006',
+'94387007-95484865',
+'95484866-96682278',
+'96682279-97589790',
+'97589791-98984227',
+'98984228-100429685',
+'100429686-101244770',
+'101244771-101929934',
+'101929935-102906303',
+'102906304-105343541',
+'105343542-106101901',
+'106101902-106946115',
+'106946116-107540865',
+'107540866-108113681',
+'108113682-108651863',
+'108651864-109385026',
+'109385027-110479715',
+'110479716-112161668',
+'112161669-113872369',
+'113872370-115437814',
+'115437815-118061858',
+'118061859-121990318',
+'121990319-125685514',
+'125685515-129419307',
+'129419308-133225532',
+'133225533-135175699',
+'135175700-135669825'
+];
+
+var FILE = 'sintel.mp4';
+var NUM_CHUNKS = BYTE_RANGES.length;
 var video = document.querySelector('video');
 var mediaSource = new MediaSource();
 video.src = window.URL.createObjectURL(mediaSource);
@@ -26,80 +120,99 @@ var sourceBuffer = null;
 
 mediaSource.addEventListener('sourceopen', onSourceOpen, false);
 mediaSource.addEventListener('sourceended', function(e) {
-  logger.log('mediaSource readyState: ' + this.readyState);
+  console.log('sourceended: mediaSource readyState: ' + this.readyState);
 }, false);
 
 
 function onSourceOpen(e) {
   sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
   sourceBuffer.addEventListener('updateend', onUpdateEnd);
-  
-  logger.log('mediaSource readyState: ' + this.readyState);
 
-  getNextFileChunk(chunkUrl(chunkIndex));
+  console.log('onsourceopen: mediaSource readyState: ' + this.readyState);
+
+  getNextFileChunk();
 }
 
 function onUpdateEnd() {
-  logger.log('updateend: ' + chunkIndex);
+  console.log('updateend: ' + chunkIndex);
   if (chunkIndex == NUM_CHUNKS - 1) {
     mediaSource.endOfStream();
   } else {
-    ++chunkIndex;
-    getNextFileChunk(chunkUrl(chunkIndex));
+    if (sourceBuffer.buffered.length > 0 && sourceBuffer.buffered.end(0) > video.currentTime) {
+      var waitTime = (sourceBuffer.buffered.end(0) - video.currentTime) / 2;
+      console.log('before next chunk download setTimeout(' + waitTime + ')');
+      var res = setTimeout(getNextFileChunk, waitTime * 1000);
+      console.log('setTimeout returned ' + res);
+    } else {
+      getNextFileChunk();
+    }
   }
 }
 
 function appendNextFileChunk(uInt8Array) {
   var file = new Blob([uInt8Array], {type: 'video/mp4'});
-  var chunkSize = file.size;
 
-  logger.log('downloaded chunk number: ' + chunkIndex);
+  console.log('downloaded chunk number: ' + chunkIndex);
 
   var reader = new FileReader();
 
   reader.onload = function(e) {
-    sourceBuffer.appendBuffer(new Uint8Array(e.target.result));
-  };
-
+    console.log('read chunk number: ' + chunkIndex);
+    onFileChunkLoaded(new Uint8Array(e.target.result));
+  }
   reader.readAsArrayBuffer(file);
 }
 
-function getNextFileChunk(url, callback) {
-  logger.log('Downloading chunk: ' + url);
+function onFileChunkLoaded(buffer) {
+
+    try {
+      sourceBuffer.appendBuffer(buffer);
+    } catch (e) {
+      if (e.name === 'QuotaExceededError') {
+        var bufferStart = sourceBuffer.buffered.start(0);
+        var removeEnd = video.currentTime - 1;
+        if (removeEnd > bufferStart) {
+          console.log('removing [' + bufferStart + ':' + removeEnd + '] from buffer');
+          sourceBuffer.remove(bufferStart, removeEnd);
+        } else {
+          var bufferMiddle = Math.ceil((sourceBuffer.buffered.end(0) +
+                bufferStart) / 2);
+          var waitTillMiddle = (bufferMiddle - video.currentTime);
+          console.log('waiting to be able to remove some buffer setTimeout(' + waitTillMiddle + ')'); 
+          var res = setTimeout(function() {
+            console.log('trying to append again');
+            onFileChunkLoaded(buffer);
+          }, waitTillMiddle * 1000);
+          console.log('setTimeout returned ' + res);
+        }
+        return false;
+      } else {
+        throw e;
+      }
+    };
+    ++chunkIndex;
+    console.log('moving on to the chunk #' + chunkIndex);
+}
+
+function getNextFileChunk() {
+  var index = chunkIndex;
+  console.log('Downloading chunk: ' + index);
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
+  xhr.open('GET', FILE, true);
+  xhr.setRequestHeader('Range', 'bytes=' + BYTE_RANGES[index]);
   xhr.responseType = 'arraybuffer';
   xhr.send();
 
   xhr.onload = function(e) {
-    if (xhr.status != 200) {
-      alert("Unexpected status code " + xhr.status + " for " + url);
+    console.log('xhr onload for chunk #: ' + index);
+    if (xhr.status != 206 && xhr.status != 200) {
+      console.log("Unexpected status code " + xhr.status + " for " + FILE);
       return false;
     }
     appendNextFileChunk(new Uint8Array(xhr.response));
   };
 }
 
-function chunkUrl(index) {
-  return FILE_PREFIX + ("00" + index).substr(-3);
-}
-</script>
-<script>
-function Logger(id) {
-  this.el = document.getElementById('log');
-}
-Logger.prototype.log = function(msg) {
-  var fragment = document.createDocumentFragment();
-  fragment.appendChild(document.createTextNode(msg));
-  fragment.appendChild(document.createElement('br'));
-  this.el.appendChild(fragment);
-};
-
-Logger.prototype.clear = function() {
-  this.el.textContent = '';
-};
-
-var logger = new Logger('log');
 </script>
 </body>
 </html>
