@@ -13,7 +13,8 @@
                 var videoElem = document.getElementById('videoElement');
                 var deviceAvailability = false;
                 var attributeBtn = document.getElementById('toggleDisableRemotePlaybackBtn');
-                
+                var callbackId;
+
                 function handleAvailabilityChange(availability) {
                   deviceAvailability = availability;
                   updateAvailabilityText();
@@ -21,8 +22,9 @@
 
                 function updateAvailabilityText() {
                     availabilityText.innerHTML = deviceAvailability ? 'device available' : 'device unavailable';
+                    availabilityText.innerHTML += 'callbackId is ' + callbackId;
                 };
-                
+
                 function switchToRemoteUI () {
                     videoElem.style.display = 'none';
                     remotePlaybackText.style.display = 'inline';
@@ -30,26 +32,27 @@
                         remotePlaybackText.innerHTML = 'Connecting to the remote device';
                     else
                         remotePlaybackText.innerHTML = 'Connected to the remote device';
+                    videoElem.remote.cancelWatchAvailability(callbackId);
                 };
 
-                var switchToLocalUI = function() {
+                function switchToLocalUI() {
                     videoElem.style.display = 'inline';
                     remotePlaybackText.style.display = 'none';
+                    setupAvailabilityWatch();
                 };
-              
-                videoElem.remote.getAvailability().then(function(availability) {
-                    handleAvailabilityChange(availability.value);
-                    availability.onchange = function() {
-                      handleAvailabilityChange(this.value);
-                    };
-                }).catch(function() {
-                    handleAvailabilityChange(true);
-                });
-              
+
+                function setupAvailabilityWatch() {
+                    videoElem.remote.watchAvailability(handleAvailabilityChange).then(
+                        function(id) { callbackId = id; },
+                        function() { handleAvailabilityChange(true); }
+                    );
+                };
+                setupAvailabilityWatch();
+
                 promptBtn.onclick = function() {
                     videoElem.remote.prompt().then(switchToRemoteUI);
                 };
-                
+
                 attributeBtn.onclick = function() {
                     if (videoElem.disableRemotePlayback) {
                         videoElem.disableRemotePlayback = null;
@@ -59,7 +62,7 @@
                         attributeBtn.innerHTML = 'Enable remote playback';
                     }
                 }
-              
+
                 if (videoElem.remote.state != 'disconnected')
                     switchToRemoteUI();
                 videoElem.remote.onstatechange = function(evt) {
