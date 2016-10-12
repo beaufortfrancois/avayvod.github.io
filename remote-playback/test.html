@@ -13,7 +13,7 @@
                 var videoElem = document.getElementById('videoElement');
                 var deviceAvailability = false;
                 var attributeBtn = document.getElementById('toggleDisableRemotePlaybackBtn');
-                var callbackId;
+                var callbackId = -1;
 
                 function handleAvailabilityChange(availability) {
                   deviceAvailability = availability;
@@ -32,7 +32,10 @@
                         remotePlaybackText.innerHTML = 'Connecting to the remote device';
                     else
                         remotePlaybackText.innerHTML = 'Connected to the remote device';
-                    videoElem.remote.cancelWatchAvailability(callbackId);
+                    if (callbackId != -1) {
+                        videoElem.remote.cancelWatchAvailability(callbackId);
+                        callbackId = -1;
+                    }
                 };
 
                 function switchToLocalUI() {
