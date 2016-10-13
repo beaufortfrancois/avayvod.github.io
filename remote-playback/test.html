@@ -68,12 +68,10 @@
 
                 if (videoElem.remote.state != 'disconnected')
                     switchToRemoteUI();
-                videoElem.remote.onstatechange = function(evt) {
-                    if (videoElem.remote.state != 'disconnected')
-                        switchToRemoteUI();
-                    else
-                        switchToLocalUI();
-                };
+
+                videoElem.remote.onconnect = switchToRemoteUI;
+                videoElem.remote.onconnecting = switchToRemoteUI;
+                videoElem.remote.ondisconnect = switchToLocalUI;
             };
         </script>
     </head>
