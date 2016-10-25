@@ -1,7 +1,13 @@
 <head id=tCF0>
-<video id=video1 src="/BigBuck.webm"><script>
-var V = document.getElementById('video1');
-V.play();
-tCFDoc1897 = document.implementation.createDocument("", "", null);
-tCFDoc1897.adoptNode(tCF0.parentNode);
-</script></html>
+  <video id=video1 src="/BigBuck.webm" ></video>
+  <button id="button1">Click me</button>
+  <script>
+    var V = document.getElementById('video1');
+    var b = document.getElementById('button1');
+    b.onclick = function() {
+      V.play();
+      tCFDoc1897 = document.implementation.createDocument("", "", null);
+      tCFDoc1897.adoptNode(tCF0.parentNode);
+    };
+</script>
+</html>
