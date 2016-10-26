@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Media Session Test page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <audio id="audio"></audio>
+    <button type="button" id="previous-track-button">Previous track</button>
+    <button type="button" id="play-pause-button">Play/pause</button>
+    <button type="button" id="next-track-button">Next track</button>
+    <br/>
+    * Music obtained from www.bensound.com under Creative Commons License.
+</body>
+<script>
+
+var tracks = [
+  {
+    src: "/tetris.mp3",
+  },
+  {
+    src: "pacman_beginning.mp3",
+  },
+]
+
+var trackId = 0;
+
+var playPauseButton = document.getElementById("play-pause-button");
+var previousTrackButton = document.getElementById("previous-track-button");
+var nextTrackButton = document.getElementById("next-track-button");
+
+var audio = document.getElementById("audio");
+
+function updateTrack() {
+  audio.src = tracks[trackId].src;
+  audio.play();
+}
+
+function selectPreviousTrack() {
+  trackId = (trackId + tracks.length - 1) % tracks.length;
+  updateTrack();
+}
+
+function selectNextTrack() {
+  trackId = (trackId + 1) % tracks.length;
+  updateTrack();
+}
+
+function togglePlayPause() {
+  if (audio.src) {
+    if (audio.paused)
+      audio.play();
+    else
+      audio.pause();
+  } else {
+    updateTrack();
+  }
+}
+
+playPauseButton.onclick = togglePlayPause;
+previousTrackButton.onclick = selectPreviousTrack;
+nextTrackButton.onclick = selectNextTrack;
+
+</script>
+</html>
