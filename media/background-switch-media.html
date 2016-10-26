@@ -39,12 +39,12 @@ function updateTrack() {
 
 function selectPreviousTrack() {
   trackId = (trackId + tracks.length - 1) % tracks.length;
-  updateTrack();
+  setTimeout(updateTrack, 5000);
 }
 
 function selectNextTrack() {
   trackId = (trackId + 1) % tracks.length;
-  updateTrack();
+  setTimeout(updateTrack, 5000);
 }
 
 function togglePlayPause() {
