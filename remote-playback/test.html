@@ -53,7 +53,8 @@
                 setupAvailabilityWatch();
 
                 promptBtn.onclick = function() {
-                    videoElem.remote.prompt().then(switchToRemoteUI);
+                    videoElem.remote.prompt().then(
+                        function() { console.log("prompt() succeeded"); });
                 };
 
                 attributeBtn.onclick = function() {
