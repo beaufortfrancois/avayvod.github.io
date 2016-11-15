@@ -32,6 +32,8 @@
                     else
                         playBtn.innerHTML = 'Pause';
                     
+                    if (!videoElem.remote) return;
+                    
                     if (videoElem.remote.state == 'Disconnected') {
                         videoElem.style.display = 'inline';
                         remotePlaybackText.style.display = 'none';
@@ -49,14 +51,22 @@
                             remotePlaybackText.innerHTML = 'Connected to the remote device';
                     }   
                 };
-                
+
+                playBtn.onclick = function() {
+                    if (videoElem.paused) {
+                        videoElem.play();
+                    } else {
+                        videoElem.pause();
+                        playBtn.innerHTML = 'Play';
+                    }
+                }
+
                 function setupAvailabilityWatch() {
                     videoElem.remote.watchAvailability(handleAvailabilityChange).then(
                         function(id) { callbackId = id; },
                         function() { handleAvailabilityChange(true); }
                     );
                 };
-                setupAvailabilityWatch();
 
                 playBtn.onclick = function() {
                     if (videoElem.paused) {
@@ -82,13 +92,15 @@
                     }
                 }
 
-                if (videoElem.remote.state != 'disconnected')
-                    switchToRemoteUI();
-
-                videoElem.remote.onconnect = updateState;
-                videoElem.remote.onconnecting = updateState;
-                videoElem.remote.ondisconnect = updateState;
+                if (videoElem.remote) {
+                    setupAvailabilityWatch();
+                    videoElem.remote.onconnect = updateState;
+                    videoElem.remote.onconnecting = updateState;
+                    videoElem.remote.ondisconnect = updateState;
+                }
+                
                 videoElem.onplay = updateState;
+                updateState();
             };
         </script>
     </head>
