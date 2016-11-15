@@ -7,6 +7,7 @@
         </style>
         <script>
             window.onload = function() {
+                var playBtn = document.getElementById('playPause');
                 var promptBtn = document.getElementById('promptBtn');
                 var availabilityText = document.getElementById('availabilityText');
                 var remotePlaybackText = document.getElementById('remotePlaybackText');
@@ -25,25 +26,30 @@
                     availabilityText.innerHTML += ', callbackId is ' + callbackId;
                 };
 
-                function switchToRemoteUI () {
-                    videoElem.style.display = 'none';
-                    remotePlaybackText.style.display = 'inline';
-                    if (videoElem.remote.state == 'connecting')
-                        remotePlaybackText.innerHTML = 'Connecting to the remote device';
+                function updateState() {
+                    if (videoElem.paused)
+                        playBtn.innerHTML = 'Play';
                     else
-                        remotePlaybackText.innerHTML = 'Connected to the remote device';
-                    if (callbackId != -1) {
-                        videoElem.remote.cancelWatchAvailability(callbackId);
-                        callbackId = -1;
-                    }
+                        playBtn.innerHTML = 'Pause';
+                    
+                    if (videoElem.remote.state == 'Disconnected') {
+                        videoElem.style.display = 'inline';
+                        remotePlaybackText.style.display = 'none';
+                        setupAvailabilityWatch();
+                    } else {
+                        videoElem.style.display = 'none';
+                        remotePlaybackText.style.display = 'inline';
+                        if (callbackId != -1) {
+                            videoElem.remote.cancelWatchAvailability(callbackId);
+                            callbackId = -1;
+                        }
+                        if (videoElem.remote.state == 'connecting')
+                            remotePlaybackText.innerHTML = 'Connecting to the remote device';
+                        else
+                            remotePlaybackText.innerHTML = 'Connected to the remote device';
+                    }   
                 };
-
-                function switchToLocalUI() {
-                    videoElem.style.display = 'inline';
-                    remotePlaybackText.style.display = 'none';
-                    setupAvailabilityWatch();
-                };
-
+                
                 function setupAvailabilityWatch() {
                     videoElem.remote.watchAvailability(handleAvailabilityChange).then(
                         function(id) { callbackId = id; },
@@ -52,6 +58,15 @@
                 };
                 setupAvailabilityWatch();
 
+                playBtn.onclick = function() {
+                    if (videoElem.paused) {
+                        videoElem.play();
+                    } else {
+                        videoElem.pause();
+                        playBtn.innerHTML = 'Play';
+                    }
+                }
+                
                 promptBtn.onclick = function() {
                     videoElem.remote.prompt().then(
                         function() { console.log("prompt() succeeded"); });
@@ -70,9 +85,10 @@
                 if (videoElem.remote.state != 'disconnected')
                     switchToRemoteUI();
 
-                videoElem.remote.onconnect = switchToRemoteUI;
-                videoElem.remote.onconnecting = switchToRemoteUI;
-                videoElem.remote.ondisconnect = switchToLocalUI;
+                videoElem.remote.onconnect = updateState;
+                videoElem.remote.onconnecting = updateState;
+                videoElem.remote.ondisconnect = updateState;
+                videoElem.onplay = updateState;
             };
         </script>
     </head>
@@ -86,6 +102,7 @@
                 <div id="remotePlaybackText" style="display: none;"></div>
             </div>
             <br>
+            <button id="playPause">Play</button>
             <button id="promptBtn">Prompt</button>
             <button id="toggleDisableRemotePlaybackBtn">Disable remote playback</button>
         </p>
