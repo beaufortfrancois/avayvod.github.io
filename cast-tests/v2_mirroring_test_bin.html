@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Cast Web SDK v2 Tests</title>
+    <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+  </head>
+  <body>
+     <script type="text/javascript" src="v2_mirroring_test_bin.js"></script>
+     <div>
+       <button id="fsbutton" onclick="goFullScreen();">Full Screen</button>
+       <br/>
+       <video id="video_player" controls autoplay loop valign=top>
+         <source id="video_player_source" src="" type="video/mp4">
+       </video>
+     </div>
+     <script>
+      document.getElementById('video_player_source').src = MEDIA_URL;
+     </script>
+  </body>
+</html>
