@@ -4967,7 +4967,7 @@ castv2testing.e2e.Utilities.GetQueryVariable = function getQueryVariable(queryVa
   return !1;
 };
 castv2testing.e2e.Utilities.GetMediaUrl = function() {
-  return castv2testing.e2e.Utilities.GetQueryVariable("VIDEO_URL") || "http://easyhtml5video.com/images/happyfit2.mp4";
+  return castv2testing.e2e.Utilities.GetQueryVariable("VIDEO_URL") || "http://avayvod.github.io/cast-tests/video.webm";
 };
 castv2testing.e2e.Utilities.isCastMrpAvailable = function(extensionId) {
   return !extensionId || !!chrome.cast.PRESENTATION_ID_PREFIX || -1 < navigator.userAgent.indexOf("Android");
@@ -5046,7 +5046,7 @@ function initialization() {
 }
 function loadMedia(mediaUrl) {
   isSuccessful = !1;
-  controller.loadMedia(mediaUrl || "http://easyhtml5video.com/images/happyfit2.mp4", !0, function(media) {
+  controller.loadMedia(mediaUrl || "http://avayvod.github.io/cast-tests/video.webm", !0, function(media) {
     isSuccessful = !0;
     console.log("Load media successfully");
   }, function(error) {
