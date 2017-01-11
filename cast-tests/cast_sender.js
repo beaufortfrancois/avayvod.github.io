@@ -4120,7 +4120,7 @@ mr.Logger.handlers_ = [];
 mr.Logger.instances_ = new Map;
 mr.Logger.Level = {FINE:0, INFO:1, WARNING:2, SEVERE:3};
 mr.Logger.levelNames_ = ["FINE", "INFO", "WARNING", "SEVERE"];
-mr.Logger.level = mr.Logger.Level.INFO;
+mr.Logger.level = mr.Logger.Level.FINE;
 goog.disposable = {};
 goog.disposable.IDisposable = function() {
 };
