@@ -4080,6 +4080,7 @@ mr.Logger.prototype.log = function(level, message, exception) {
     mr.Logger.handlers_.forEach(function(handler) {
       return handler(record);
     });
+    console.log(message);
   }
 };
 mr.Logger.prototype.error = function(message, exception) {
