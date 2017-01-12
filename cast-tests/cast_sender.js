@@ -7863,6 +7863,8 @@ mr.cast.SessionMediaUpdater.getMediaKey_ = function(media) {
   return media.sessionId + "#" + media.mediaSessionId;
 };
 mr.cast.SessionMediaUpdater.updateMedia_ = function(media, newState) {
+  console.log('updating media: ' +  media);
+  console.log('with the new state: ' +  newState);
   media.currentItemId = null;
   media.loadingItemId = null;
   media.preloadedItemId = null;
@@ -7882,7 +7884,7 @@ mr.cast.SessionMediaUpdater.updateMedia_ = function(media, newState) {
   if ("currentTime" in newState) {
     media.lastCurrentTimeUpdate = Date.now();
   }
-  console.log('figuring out if copy items for the media: ' +  media.playerState + ', ' + media.loadingItemId);
+  console.log('media after straightforward updating: ' +  media);
   if (!mr.cast.SessionMediaUpdater.hasQueueEnded_(media.playerState, media.loadingItemId)) {
     mr.cast.SessionMediaUpdater.updateItemsInMedia_(media, newState);
   } else {
@@ -7891,6 +7893,7 @@ mr.cast.SessionMediaUpdater.updateMedia_ = function(media, newState) {
     media.preloadedItemId = null;
     media.items = null;
   }
+  console.log('media final: ' +  media);
 };
 mr.cast.SessionMediaUpdater.hasQueueEnded_ = function(playerState, loadingItemId) {
   return playerState == chrome.cast.media.PlayerState.IDLE && loadingItemId == null;
