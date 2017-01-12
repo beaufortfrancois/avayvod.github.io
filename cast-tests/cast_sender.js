@@ -7882,6 +7882,7 @@ mr.cast.SessionMediaUpdater.updateMedia_ = function(media, newState) {
   if ("currentTime" in newState) {
     media.lastCurrentTimeUpdate = Date.now();
   }
+  console.log('figuring out if copy items for the media: ' +  media.playerState + ', ' + media.loadingItemId);
   if (!mr.cast.SessionMediaUpdater.hasQueueEnded_(media.playerState, media.loadingItemId)) {
     mr.cast.SessionMediaUpdater.updateItemsInMedia_(media, newState);
   } else {
